@@ -8,9 +8,15 @@ import { JwtModule } from './jwt/jwt.module';
 import { ApolloDriver } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrmConfig } from '../orm-config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'development' && '.dev.env',
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
+    }),
     TypeOrmModule.forRoot(OrmConfig),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
