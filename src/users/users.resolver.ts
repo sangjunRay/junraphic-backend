@@ -1,9 +1,9 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { Users } from './entities/users.entity';
+import { UsersEntity } from './entities/users.entity';
 
-@Resolver(() => Users)
+@Resolver(() => UsersEntity)
 export class UsersResolver {
-  @Query(() => Users)
+  @Query(() => UsersEntity)
   isAdmin() {
     return true;
   }

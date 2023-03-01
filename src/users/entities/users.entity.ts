@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { IsBoolean, IsString } from 'class-validator';
 
 @ObjectType()
-export class Users {
+export class UsersEntity {
   @Field(() => Boolean)
   @IsBoolean()
   isAdmin: boolean;

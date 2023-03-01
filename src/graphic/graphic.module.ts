@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { GraphicResolver } from './graphic.resolver';
 
-@Module({})
+@Module({
+  imports: [GraphicResolver],
+})
 export class GraphicModule {}

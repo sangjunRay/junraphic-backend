@@ -6,9 +6,12 @@ import { ThemeModule } from './theme/theme.module';
 import { BannerModule } from './banner/banner.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ApolloDriver } from '@nestjs/apollo';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { OrmConfig } from '../orm-config';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot(OrmConfig),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       driver: ApolloDriver,
