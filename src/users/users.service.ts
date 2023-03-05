@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dtos/create-user.dto';
-import { GeneralMutationOutput } from '../common/dtos/general-output.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,22 +16,20 @@ export class UsersService {
     email,
     role,
     name,
-  }: CreateUserInput): Promise<string | undefined> {
+  }: CreateUserInput): Promise<[boolean, string?]> {
     try {
-      const exist = await this.users.findOneBy({ cid });
-      if (exist) {
-        return '이미 존재하는 아이디입니다.';
+      const user = await this.users.findOneBy({ email });
+      if (user) {
+        const cidIsCorrect = await user.checkHashedCid(cid);
+        if (cidIsCorrect) {
+          return [false, '이미 존재하는 이메일입니다.'];
+        }
+      } else {
+        await this.users.save(this.users.create({ email, role, cid, name }));
+        return [true];
       }
-
-      //TODO : hashing cid
-      const hashedCid = cid + 'hashing';
-
-      await this.users.save(
-        this.users.create({ email, role, cid: hashedCid, name }),
-      );
-      return;
     } catch (e) {
-      return e;
+      return [false, e];
     }
   }
 }

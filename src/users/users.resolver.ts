@@ -15,11 +15,11 @@ export class UsersResolver {
   @Mutation(() => GeneralMutationOutput)
   async createUser(@Args('input') createUserInput: CreateUserInput) {
     try {
-      const error = await this.userService.createUser(createUserInput);
+      const [ok, error] = await this.userService.createUser(createUserInput);
       if (error) {
-        return { ok: false, error };
+        return { ok, error };
       }
-      return { ok: true };
+      return { ok };
     } catch (error) {
       return { ok: false, error };
     }
