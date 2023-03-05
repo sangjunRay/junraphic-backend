@@ -7,26 +7,29 @@ import { BannerModule } from './banner/banner.module';
 import { JwtModule } from './jwt/jwt.module';
 import { ApolloDriver } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrmConfig } from '../orm-config';
 import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
+import { GraphicEntity } from './graphic/entities/graphic.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { UsersEntity } from './users/entities/users.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'development' && '.dev.env',
+      envFilePath: process.env.NODE_ENV === 'development' && '.env.development',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
-      validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid(['development', 'production']),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.string().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_NAME: Joi.string().required(),
-      }),
     }),
-    TypeOrmModule.forRoot(OrmConfig),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: +process.env.DB_PORT,
+      username: process.env.DB_USERNAME,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASSWORD,
+      synchronize: process.env.NODE_ENV !== 'production',
+      logging: true,
+      entities: [GraphicEntity, UsersEntity],
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       driver: ApolloDriver,
@@ -36,6 +39,7 @@ import Joi from 'joi';
     ThemeModule,
     BannerModule,
     JwtModule,
+    CategoriesModule,
   ],
   controllers: [],
   providers: [],

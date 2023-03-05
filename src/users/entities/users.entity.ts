@@ -1,11 +1,18 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
+import { GeneralEntity } from '../../common/entities/general.entity';
+
+type UserRoles = 'author' | 'customer';
 
 @ObjectType()
-export class UsersEntity {
-  @Field(() => Boolean)
-  @IsBoolean()
-  isAdmin: boolean;
+export class UsersEntity extends GeneralEntity {
+  @Field(() => String)
+  @IsString()
+  role: UserRoles;
+
+  @Field(() => String)
+  @IsString()
+  email: string;
 
   @Field(() => String)
   @IsString()
