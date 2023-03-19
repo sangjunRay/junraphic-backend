@@ -18,6 +18,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { UsersEntity } from './users/entities/users.entity';
 import { JwtMiddleware } from './jwt/jwt.middleware';
 import { AuthModule } from './auth/auth.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { AuthModule } from './auth/auth.module';
     BannerModule,
     CategoriesModule,
     AuthModule,
+    TransactionModule,
   ],
   controllers: [],
   providers: [],
